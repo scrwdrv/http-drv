@@ -1,7 +1,6 @@
-import * as http from 'http';
-import * as https from 'https';
-
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const https = require("https");
 const req = https.request({
     host: 'www.google.com',
     port: 443,
@@ -12,9 +11,7 @@ const req = https.request({
         console.log(d);
     });
 });
-
 req.on('error', e => {
     console.log(e);
 });
-
 req.end();
