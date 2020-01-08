@@ -1,0 +1,22 @@
+{
+  "name": "http-drv",
+  "version": "1.0.0",
+  "description": "HTTP server & client framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scrwdrv/http-drv.git"
+  },
+  "keywords": [
+    "http"
+  ],
+  "author": "scrwdrv",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scrwdrv/http-drv/issues"
+  },
+  "homepage": "https://github.com/scrwdrv/http-drv#readme"
+}
