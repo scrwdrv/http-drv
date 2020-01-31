@@ -148,12 +148,12 @@ export class server {
                         const match = reg.exec(p);
                         if (!match) return false;
 
-                        let params = {};
+                        let r = {};
 
                         for (let i = 0; i < l; i++)
-                            params[params[i]] = match[i + 1];
+                            r[params[i]] = match[i + 1];
 
-                        return params;
+                        return r;
                     }
                     else if (segments.length > 1) route.match = p => {
                         return reg.test(p);
