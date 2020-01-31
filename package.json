@@ -18,5 +18,15 @@
   "bugs": {
     "url": "https://github.com/scrwdrv/http-drv/issues"
   },
-  "homepage": "https://github.com/scrwdrv/http-drv#readme"
+  "homepage": "https://github.com/scrwdrv/http-drv#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "mime-types": "^2.1.26",
+    "query-string": "^6.10.1",
+    "simple-regex-toolkit": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.16",
+    "@types/mime-types": "^2.1.0"
+  }
 }
