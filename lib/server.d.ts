@@ -1,5 +1,5 @@
 /// <reference types="node" />
-declare namespace Server {
+export declare namespace Server {
     type Methods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
     type RouteHandler = (req: Server.Reqeust, res: Server.Response, next: () => void) => void;
     type SetRouteHandler = (path: string | RegExp, handler: Server.RouteHandler, secondHandler?: Server.RouteHandler) => void;
@@ -42,7 +42,7 @@ declare namespace Server {
         redirect: (path: string, code?: number) => void;
         send: (content: string, code?: number) => void;
         json: (json: object, code?: number) => void;
-        render: (json: object, templateId: string, dynamic: boolean, code?: number) => void;
+        render: (data: object, id: string, dynamic: boolean, code?: number) => void;
         cookie: (name: string, value: string, opts: {
             httpOnly?: boolean;
             secure?: boolean;
@@ -84,4 +84,3 @@ export declare class Server {
     on<T extends Server.Events>(evt: T, listener: Server.EventListener<T>): void;
     private emit;
 }
-export {};

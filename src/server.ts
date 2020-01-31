@@ -6,7 +6,7 @@ import { parse as qsParse } from 'query-string';
 import * as mime from 'mime-types';
 import * as template from './template-engine';
 
-namespace Server {
+export namespace Server {
 
     export type Methods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
     export type RouteHandler = (req: Server.Reqeust, res: Server.Response, next: () => void) => void;
@@ -49,7 +49,7 @@ namespace Server {
         redirect: (path: string, code?: number) => void;
         send: (content: string, code?: number) => void;
         json: (json: object, code?: number) => void;
-        render: (json: object, templateId: string, dynamic: boolean, code?: number) => void;
+        render: (data: object, id: string, dynamic: boolean, code?: number) => void;
         cookie: (name: string, value: string, opts: {
             httpOnly?: boolean;
             secure?: boolean;
@@ -219,9 +219,10 @@ export class Server {
                     });
                     res.end(JSON.stringify(json));
                 },
-                render: (json: object, templateId: string, dynamic: boolean, code = 200) => {
+                render: (data: object, id: string, dynamic: boolean, code = 200) => {
                     if (res.finished) throw new Error('can\'t write data after stream ended');
-
+                    dynamic ? response.json(this.templates[id].dynamic(data), code) :
+                        response.send(this.templates[id].static(data), code);
                 },
                 cookie: (name: string, value: string, opts: {
                     httpOnly?: boolean;
