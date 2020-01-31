@@ -64,7 +64,7 @@ export namespace Server {
 }
 
 
-export class Server {
+export class server {
 
     public all: Server.SetRouteHandler;
     public get: Server.SetRouteHandler;

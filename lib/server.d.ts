@@ -55,7 +55,7 @@ export declare namespace Server {
         }) => void;
     }
 }
-export declare class Server {
+export declare class server {
     all: Server.SetRouteHandler;
     get: Server.SetRouteHandler;
     head: Server.SetRouteHandler;
