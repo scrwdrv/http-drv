@@ -107,13 +107,14 @@ export class server {
 
                 if (typeof path === 'string') {
 
-                    const segments = path.split('*');
+                    const segments = path.split('*'),
+                        segmentsLength = segments.length;
 
                     let regexString = '',
                         params = [];
 
-                    for (let i = 0, l = segments.length; i < l; i++)
-                        if (i !== l - 1) regexString += `${handleParams(segments[i])}.*`
+                    for (let i = 0; i < segmentsLength; i++)
+                        if (i !== segmentsLength - 1) regexString += `${handleParams(segments[i])}.*`
                         else regexString += handleParams(segments[i]);
 
                     function handleParams(str: string) {
@@ -141,21 +142,21 @@ export class server {
                     }
 
                     const reg = regex.from('/' + regexString + '/' + (/[A-z]/.test(regexString) ? 'i' : '')),
-                        l = params.length;
+                        paramsLength = params.length;
 
-                    if (params.length) route.match = p => {
+                    if (paramsLength) route.match = p => {
 
                         const match = reg.exec(p);
                         if (!match) return false;
 
                         let r = {};
 
-                        for (let i = 0; i < l; i++)
+                        for (let i = 0; i < paramsLength; i++)
                             r[params[i]] = match[i + 1];
 
                         return r;
                     }
-                    else if (segments.length > 1) route.match = p => {
+                    else if (segmentsLength > 1) route.match = p => {
                         return reg.test(p);
                     }
                     else route.match = p => {
