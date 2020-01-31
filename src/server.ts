@@ -392,7 +392,7 @@ export class Server {
 
                 return url;
             }
-        })
+        });
     }
 
     template(root: string, opts: {
