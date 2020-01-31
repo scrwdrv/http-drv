@@ -50,13 +50,13 @@ export namespace Server {
         send: (content: string, code?: number) => void;
         json: (json: object, code?: number) => void;
         render: (data: object, id: string, dynamic: boolean, code?: number) => void;
-        cookie: (name: string, value: string, opts: {
+        cookie: (name: string, value: string, opts?: {
             httpOnly?: boolean;
             secure?: boolean;
             maxAge?: number;
             path?: string;
         }) => void;
-        file: (path: string, opts: {
+        file: (path: string, opts?: {
             maxAge?: number;
             onError?: (err: NodeJS.ErrnoException) => void;
         }) => void;
@@ -246,7 +246,7 @@ export class server {
                                 to = range[1] ? parseInt(range[1]) : stats.size - 1;
 
                             res.writeHead(206, {
-                                'Content-Range': `bytes ${range[0]}-${range[1]}/${stats.size}`,
+                                'Content-Range': `bytes ${from}-${to}/${stats.size}`,
                                 'Accept-Ranges': 'bytes',
                                 'Content-Length': to - from + 1,
                                 'Content-Type': mime.contentType(PATH.extname(path)) || 'text/html; charset=UTF-8',
@@ -396,33 +396,32 @@ export class server {
         });
     }
 
-    template(root: string, opts: {
+    async template(root: string, opts: {
         developmentMode: boolean;
         id?: string;
     } = { developmentMode: false }) {
-        fs.readdir(root, async (err, files) => {
-            if (err) throw err;
 
-            let paths: string[] = [];
+        const files = fs.readdirSync(root);
+        let paths: string[] = [];
 
-            for (let i = files.length; i--;) {
-                const file = /.+(?=\.template$)/.exec(files[i]),
-                    path = PATH.join(root, files[i]);
+        for (let i = files.length; i--;) {
+            const file = /.+(?=\.template$)/.exec(files[i]),
+                path = PATH.join(root, files[i]);
 
-                if (file) try {
-                    this.templates[opts.id || file[0]] = await template.update(path);
-                    paths.push(path);
-                } catch (err) {
-                    throw err;
-                }
+            if (file) try {
+                this.templates[opts.id || file[0]] = await template.update(path);
+                paths.push(path);
+            } catch (err) {
+                throw err;
             }
+        }
 
-            if (opts.developmentMode) this.all('*', (req, res, next) =>
-                Promise.all(paths.map(p => {
-                    return template.update(p);
-                })).then(next)
-            );
-        });
+        if (opts.developmentMode) this.all('*', (req, res, next) =>
+            Promise.all(paths.map(p => {
+                return template.update(p);
+            })).then(next)
+        );
+
     }
 
     static(path: string, root: string, opts: { maxAge?: number } = {}) {
@@ -435,7 +434,7 @@ export class server {
     }
 
     listen(port: number, host: string = 'localhost', callback?: () => void) {
-        this.server.listen(port, host, callback)
+        return this.server.listen(port, host, callback)
             .on('error', (err) => this.emit('error', err))
             .on('close', () => this.emit('close'));
     }

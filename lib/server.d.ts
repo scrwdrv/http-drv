@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import * as http from 'http';
 export declare namespace Server {
     type Methods = 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'OPTIONS' | 'TRACE' | 'PATCH';
     type RouteHandler = (req: Server.Reqeust, res: Server.Response, next: () => void) => void;
@@ -43,13 +44,13 @@ export declare namespace Server {
         send: (content: string, code?: number) => void;
         json: (json: object, code?: number) => void;
         render: (data: object, id: string, dynamic: boolean, code?: number) => void;
-        cookie: (name: string, value: string, opts: {
+        cookie: (name: string, value: string, opts?: {
             httpOnly?: boolean;
             secure?: boolean;
             maxAge?: number;
             path?: string;
         }) => void;
-        file: (path: string, opts: {
+        file: (path: string, opts?: {
             maxAge?: number;
             onError?: (err: NodeJS.ErrnoException) => void;
         }) => void;
@@ -76,11 +77,11 @@ export declare class server {
     template(root: string, opts?: {
         developmentMode: boolean;
         id?: string;
-    }): void;
+    }): Promise<void>;
     static(path: string, root: string, opts?: {
         maxAge?: number;
     }): void;
-    listen(port: number, host?: string, callback?: () => void): void;
+    listen(port: number, host?: string, callback?: () => void): http.Server;
     on<T extends Server.Events>(evt: T, listener: Server.EventListener<T>): void;
     private emit;
 }
